@@ -105,8 +105,30 @@ export const editUser = async ({
       },
     });
 
-    return updatedUser;
+    return {
+      id: updatedUser.id,
+      email: updatedUser.email,
+      username: updatedUser.username,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+    };
   } catch (error) {
     throw new Error();
   }
+};
+
+export const getByEmail = async (email: string) => {
+  const user = await getUserByEmail(email);
+
+  if (!user) {
+    throw new ClientError('UserNotFound', ErrorCodes.NOT_FOUND);
+  }
+
+  return {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  };
 };
