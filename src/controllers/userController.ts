@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
-import { createUser as create } from '../models/userModel';
+import { createUser as create, editUser as edit } from '../models/userModel';
 
-const createUser: RequestHandler = async (req, res, next) => {
+export const createUser: RequestHandler = async (req, res, next) => {
   const { email, username, firstName, lastName } = req.body;
 
   try {
@@ -17,4 +17,19 @@ const createUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export { createUser };
+export const editUser: RequestHandler = async (req, res, next) => {
+  const { email, username, firstName, lastName } = req.body;
+  const { userId } = req.params;
+
+  try {
+    const user = await edit({ userId, email, username, firstName, lastName });
+
+    res.status(200).send({
+      error: undefined,
+      data: user,
+      success: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

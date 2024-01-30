@@ -1,5 +1,5 @@
 import express from 'express';
-import userRoutes from './routes/userRoutes';
+import { userRoutes } from './routes/userRoutes';
 import { handleError } from './middlewares/errorMiddleware';
 
 const PORT = process.env.PORT || 3000;

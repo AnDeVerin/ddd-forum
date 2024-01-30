@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import crypto from 'crypto';
 import { ClientError, ErrorCodes } from '../utils/errors';
 
@@ -17,32 +16,29 @@ const generateRandomPassword = () => {
   return crypto.randomBytes(4).toString('hex');
 };
 
+const getUserByEmail = async (email: string) => {
+  return await prisma.user.findUnique({ where: { email } });
+};
+
+const getUserByUsername = async (username: string) => {
+  return await prisma.user.findUnique({ where: { username } });
+};
+
 export const createUser = async ({
   email,
   username,
   firstName,
   lastName,
 }: User) => {
-  // Validate the input
   if (!email || !username) {
     throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
   }
 
-  // Check if the user with given email already exists
-  const userWithGivenEmail = await prisma.user.findUnique({
-    where: { email },
-  });
-
-  if (userWithGivenEmail) {
+  if (await getUserByEmail(email)) {
     throw new ClientError('EmailAlreadyInUse', ErrorCodes.CONFLICT);
   }
 
-  // Check if the user with given username already exists
-  const userWithGivenUsername = await prisma.user.findUnique({
-    where: { username },
-  });
-
-  if (userWithGivenUsername) {
+  if (await getUserByUsername(username)) {
     throw new ClientError('UsernameAlreadyTaken', ErrorCodes.CONFLICT);
   }
 
@@ -61,6 +57,55 @@ export const createUser = async ({
     });
 
     return newUser;
+  } catch (error) {
+    throw new Error();
+  }
+};
+
+export const editUser = async ({
+  userId,
+  email,
+  username,
+  firstName,
+  lastName,
+}: User & { userId: string }) => {
+  const id = parseInt(userId);
+
+  if (!email || !username || !id) {
+    throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
+  }
+
+  const currentUser = await prisma.user.findUnique({ where: { id } });
+
+  if (!currentUser) {
+    throw new ClientError('UserNotFound', ErrorCodes.NOT_FOUND);
+  }
+
+  const userWithGivenEmail = await getUserByEmail(email);
+
+  if (userWithGivenEmail && userWithGivenEmail.id !== id) {
+    throw new ClientError('EmailAlreadyInUse', ErrorCodes.CONFLICT);
+  }
+
+  const userWithGivenUsername = await getUserByUsername(username);
+
+  if (userWithGivenUsername && userWithGivenUsername.id !== id) {
+    throw new ClientError('UsernameAlreadyTaken', ErrorCodes.CONFLICT);
+  }
+
+  // Update the user
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        email,
+        username,
+        firstName,
+        lastName,
+      },
+    });
+
+    return updatedUser;
   } catch (error) {
     throw new Error();
   }
