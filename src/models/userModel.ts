@@ -76,13 +76,13 @@ export const editUser = async ({
 
   const userWithGivenEmail = await getUserByEmail(email);
 
-  if (userWithGivenEmail?.id !== id) {
+  if (userWithGivenEmail && userWithGivenEmail.id !== id) {
     throw new ClientError(ErrorMessages.EMAIL_IN_USE, ErrorCodes.CONFLICT);
   }
 
   const userWithGivenUsername = await getUserByUsername(username);
 
-  if (userWithGivenUsername?.id !== id) {
+  if (userWithGivenUsername && userWithGivenUsername.id !== id) {
     throw new ClientError(ErrorMessages.USERNAME_IN_USE, ErrorCodes.CONFLICT);
   }
 
