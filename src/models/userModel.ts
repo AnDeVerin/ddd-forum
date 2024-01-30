@@ -1,59 +1,49 @@
-import { PrismaClient } from '@prisma/client';
-import crypto from 'crypto';
-import { ClientError, ErrorCodes } from '../utils/errors';
+import { ClientError, ErrorCodes, ErrorMessages } from '../utils/errors';
+import {
+  getUserByEmail,
+  getUserByUsername,
+  createUser as create,
+  getUserById,
+  updateUserById,
+} from '../utils/db';
+import { generateRandomPassword } from '../utils/password';
 
-const prisma = new PrismaClient();
-
-interface User {
+export interface UserProps {
   email: string;
   username: string;
   firstName: string;
   lastName: string;
 }
 
-const generateRandomPassword = () => {
-  // Generate a random 8-character password
-  return crypto.randomBytes(4).toString('hex');
-};
-
-const getUserByEmail = async (email: string) => {
-  return await prisma.user.findUnique({ where: { email } });
-};
-
-const getUserByUsername = async (username: string) => {
-  return await prisma.user.findUnique({ where: { username } });
-};
-
 export const createUser = async ({
   email,
   username,
   firstName,
   lastName,
-}: User) => {
+}: UserProps) => {
   if (!email || !username || !firstName || !lastName) {
-    throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
+    throw new ClientError(
+      ErrorMessages.VALIDATION_ERROR,
+      ErrorCodes.BAD_REQUEST
+    );
   }
 
   if (await getUserByEmail(email)) {
-    throw new ClientError('EmailAlreadyInUse', ErrorCodes.CONFLICT);
+    throw new ClientError(ErrorMessages.EMAIL_IN_USE, ErrorCodes.CONFLICT);
   }
 
   if (await getUserByUsername(username)) {
-    throw new ClientError('UsernameAlreadyTaken', ErrorCodes.CONFLICT);
+    throw new ClientError(ErrorMessages.USERNAME_IN_USE, ErrorCodes.CONFLICT);
   }
 
   // Create a new user
-  const password = generateRandomPassword();
-
   try {
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        username,
-        firstName,
-        lastName,
-        password,
-      },
+    const newUser = await create({
+      email,
+      username,
+      firstName,
+      lastName,
+      password: generateRandomPassword(),
     });
 
     return newUser;
@@ -68,41 +58,41 @@ export const editUser = async ({
   username,
   firstName,
   lastName,
-}: User & { userId: string }) => {
+}: UserProps & { userId: string }) => {
   const id = parseInt(userId);
 
   if (!id || !email || !username || !firstName || !lastName) {
-    throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
+    throw new ClientError(
+      ErrorMessages.VALIDATION_ERROR,
+      ErrorCodes.BAD_REQUEST
+    );
   }
 
-  const currentUser = await prisma.user.findUnique({ where: { id } });
+  const currentUser = await getUserById(id);
 
   if (!currentUser) {
-    throw new ClientError('UserNotFound', ErrorCodes.NOT_FOUND);
+    throw new ClientError(ErrorMessages.USER_NOT_FOUND, ErrorCodes.NOT_FOUND);
   }
 
   const userWithGivenEmail = await getUserByEmail(email);
 
-  if (userWithGivenEmail && userWithGivenEmail.id !== id) {
-    throw new ClientError('EmailAlreadyInUse', ErrorCodes.CONFLICT);
+  if (userWithGivenEmail?.id !== id) {
+    throw new ClientError(ErrorMessages.EMAIL_IN_USE, ErrorCodes.CONFLICT);
   }
 
   const userWithGivenUsername = await getUserByUsername(username);
 
-  if (userWithGivenUsername && userWithGivenUsername.id !== id) {
-    throw new ClientError('UsernameAlreadyTaken', ErrorCodes.CONFLICT);
+  if (userWithGivenUsername?.id !== id) {
+    throw new ClientError(ErrorMessages.USERNAME_IN_USE, ErrorCodes.CONFLICT);
   }
 
   // Update the user
   try {
-    const updatedUser = await prisma.user.update({
-      where: { id },
-      data: {
-        email,
-        username,
-        firstName,
-        lastName,
-      },
+    const updatedUser = await updateUserById(id, {
+      email,
+      username,
+      firstName,
+      lastName,
     });
 
     return {
@@ -121,7 +111,7 @@ export const getByEmail = async (email: string) => {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    throw new ClientError('UserNotFound', ErrorCodes.NOT_FOUND);
+    throw new ClientError(ErrorMessages.USER_NOT_FOUND, ErrorCodes.NOT_FOUND);
   }
 
   return {
