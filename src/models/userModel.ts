@@ -7,8 +7,8 @@ const prisma = new PrismaClient();
 interface User {
   email: string;
   username: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
 }
 
 const generateRandomPassword = () => {
@@ -30,7 +30,7 @@ export const createUser = async ({
   firstName,
   lastName,
 }: User) => {
-  if (!email || !username) {
+  if (!email || !username || !firstName || !lastName) {
     throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
   }
 
@@ -71,7 +71,7 @@ export const editUser = async ({
 }: User & { userId: string }) => {
   const id = parseInt(userId);
 
-  if (!email || !username || !id) {
+  if (!id || !email || !username || !firstName || !lastName) {
     throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
   }
 
