@@ -23,6 +23,30 @@ export const createUser = async ({
   firstName,
   lastName,
 }: User) => {
+  // Validate the input
+  if (!email || !username) {
+    throw new ClientError('ValidationError', ErrorCodes.BAD_REQUEST);
+  }
+
+  // Check if the user with given email already exists
+  const userWithGivenEmail = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (userWithGivenEmail) {
+    throw new ClientError('EmailAlreadyInUse', ErrorCodes.CONFLICT);
+  }
+
+  // Check if the user with given username already exists
+  const userWithGivenUsername = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (userWithGivenUsername) {
+    throw new ClientError('UsernameAlreadyTaken', ErrorCodes.CONFLICT);
+  }
+
+  // Create a new user
   const password = generateRandomPassword();
 
   try {
@@ -38,16 +62,6 @@ export const createUser = async ({
 
     return newUser;
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (
-        error.code === 'P2002' &&
-        Array.isArray(error.meta?.target) &&
-        error.meta?.target.includes('email')
-      ) {
-        throw new ClientError('EmailAlreadyInUse', ErrorCodes.CONFLICT);
-      }
-    }
-
     throw new Error();
   }
 };
