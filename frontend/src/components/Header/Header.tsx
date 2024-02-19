@@ -1,16 +1,23 @@
+import { useContext } from 'react';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
+
 import { Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { UserContext } from '@/utils/context/user';
 
 import logo from '/vite.svg';
 import styles from './Header.module.css';
 
 export const Header = () => {
-  // const user = { name: 'Andrei' };
-  const user = null;
+  const navigate = useNavigate();
+  const match = useMatch('/register');
+  const user = useContext(UserContext);
 
   return (
     <header className={styles.header}>
-      <img src={logo} className={styles.logo} alt="Forum logo" />
+      <Link to="/">
+        <img src={logo} className={styles.logo} alt="Forum logo" />
+      </Link>
       <div className={styles.titleWrapper}>
         <div className={styles.title}>Domain-Driven Designeers</div>
         <p className={styles.subtitle}>
@@ -20,21 +27,28 @@ export const Header = () => {
           Submit
         </Button>
       </div>
-      <div className={styles.rightContainer}>
-        {user ? (
-          <div className={styles.userBlock}>
-            <div>
-              <UserOutlined />
-              &nbsp;{user.name}
+      {!match && (
+        <div className={styles.rightContainer}>
+          {user ? (
+            <div className={styles.userBlock}>
+              <div>
+                <UserOutlined />
+                &nbsp;{user?.username}
+              </div>
+              <Button type="link">Logout</Button>
             </div>
-            <Button type="link">Logout</Button>
-          </div>
-        ) : (
-          <Button type="primary" size="large" block>
-            Join
-          </Button>
-        )}
-      </div>
+          ) : (
+            <Button
+              type="primary"
+              size="large"
+              block
+              onClick={() => navigate('/register', { replace: true })}
+            >
+              Join
+            </Button>
+          )}
+        </div>
+      )}
     </header>
   );
 };
