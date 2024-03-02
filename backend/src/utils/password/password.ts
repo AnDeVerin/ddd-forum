@@ -1,4 +1,3 @@
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 
-export const generateRandomPassword = () =>
-  crypto.randomBytes(4).toString('hex');
+export const generateRandomPassword = () => randomBytes(4).toString('hex');
