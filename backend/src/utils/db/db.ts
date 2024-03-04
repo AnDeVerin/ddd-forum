@@ -31,3 +31,21 @@ export const updateUserById = (id: number, data: UserProps) =>
     where: { id },
     data,
   });
+
+export const getRecentPosts = (limit: number) => {
+  return prisma.post.findMany({
+    take: limit,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      votes: true,
+      comments: true,
+      memberPostedBy: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+};
