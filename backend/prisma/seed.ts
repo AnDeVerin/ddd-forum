@@ -66,8 +66,8 @@ async function main() {
         create: [
           {
             postType: 'text',
-            title: 'Follow Prisma on Twitter',
-            content: 'https://twitter.com/prisma',
+            title: 'Domain services vs Application services',
+            content: 'Domain services vs Application services',
             votes: {
               create: [
                 { memberId: charlieMember.id, voteType: 'UPVOTE' },
@@ -84,8 +84,8 @@ async function main() {
           },
           {
             postType: 'text',
-            title: 'Follow Nexus on Twitter',
-            content: 'https://twitter.com/nexusgql',
+            title: 'Ports and Adapters',
+            content: 'Ports and Adapters',
             votes: {
               create: [
                 { memberId: charlieMember.id, voteType: 'UPVOTE' },
@@ -101,8 +101,10 @@ async function main() {
           },
           {
             postType: 'text',
-            title: 'Third post on the forum',
-            content: 'Third post on the forum about something',
+            title:
+              'An Introduction to Domain-Driven design - DDD w/ TypeScript',
+            content:
+              'An Introduction to Domain-Driven design - DDD w/ TypeScript',
             votes: {
               create: [{ memberId: charlieMember.id, voteType: 'UPVOTE' }],
             },
@@ -114,8 +116,6 @@ async function main() {
       },
     },
   });
-
-  console.log({ alice, aliceMember });
 }
 main()
   .then(async () => {
