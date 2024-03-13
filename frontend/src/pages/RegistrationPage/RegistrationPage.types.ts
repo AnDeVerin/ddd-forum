@@ -1,5 +1,5 @@
 import { ErrorMessages } from '@/utils/constants/errors';
-import { UserType } from '@/utils/types/user';
+import { User } from '@/utils/types/user';
 
 export interface UserRegistrationData {
   email: string;
@@ -9,6 +9,6 @@ export interface UserRegistrationData {
 }
 export interface UserRegistrationResponse {
   success: boolean;
-  data: UserType | undefined;
+  data: User | undefined;
   error: ErrorMessages | undefined;
 }

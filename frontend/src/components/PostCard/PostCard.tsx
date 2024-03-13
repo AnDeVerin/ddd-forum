@@ -1,25 +1,31 @@
 import { differenceInCalendarDays } from 'date-fns';
 
-import { PostCardProps } from './PostCard.types';
 import styles from './PostCard.module.css';
 import { Button } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import Title from 'antd/es/typography/Title';
 import Link from 'antd/es/typography/Link';
+import { Post, Vote, VoteType } from '@/utils/types';
 
 const getPostAge = (postDate: Date) => {
   const diffInDays = differenceInCalendarDays(new Date(), postDate);
   return diffInDays ? `${diffInDays} days ago` : 'Today';
 };
 
-export const PostCard = (props: PostCardProps) => {
-  const { title, id, createdAt, author, commentsCount, rating } = props;
+const getRating = (votes: Vote[]) => {
+  return votes.reduce((acc, vote) => {
+    return acc + (vote.voteType === VoteType.UPVOTE ? 1 : -1);
+  }, 0);
+};
+
+export const PostCard = (props: Post) => {
+  const { title, id, createdAt, votes, memberPostedBy, comments } = props;
 
   return (
     <article className={styles.card}>
       <div className={styles.vote}>
         <Button shape="circle" icon={<UpOutlined />} size="small" type="text" />
-        {rating}
+        {getRating(votes)}
         <Button
           shape="circle"
           icon={<DownOutlined />}
@@ -34,11 +40,11 @@ export const PostCard = (props: PostCardProps) => {
         </Link>
       </Title>
       <div className={styles.subtitleContainer}>
-        {getPostAge(createdAt)} | by&nbsp;
-        <Link href={`members/${author.username}`} target="_blank">
-          {author.username}&nbsp;
+        {getPostAge(new Date(createdAt))} | by&nbsp;
+        <Link href={`members/${memberPostedBy.user.username}`} target="_blank">
+          {memberPostedBy.user.username}&nbsp;
         </Link>
-        | {commentsCount ?? 0}
+        | {comments.length ?? 0}
         &nbsp;comments
       </div>
     </article>

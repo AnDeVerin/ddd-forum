@@ -13,6 +13,8 @@ import {
 
 import styles from './RegistrationPage.module.css';
 
+const HOST = import.meta.env.VITE_SERVER_URL;
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -40,7 +42,7 @@ const tailFormItemLayout = {
 const onFinish = async (
   values: UserRegistrationData
 ): Promise<UserRegistrationResponse> => {
-  const responce = await fetch('http://localhost:3000/users/new', {
+  const responce = await fetch(`${HOST}/users/new`, {
     method: 'POST',
     headers: [['Content-Type', 'application/json; charset=utf-8']],
     body: JSON.stringify(values),
@@ -58,8 +60,6 @@ export const RegistrationPage = () => {
     async (values: UserRegistrationData) => {
       setIsLoading(true);
       const { success, data, error } = await onFinish(values);
-      console.log(error);
-      console.log(data);
 
       if (success && data) {
         toast('Success! Redirecting home.', {

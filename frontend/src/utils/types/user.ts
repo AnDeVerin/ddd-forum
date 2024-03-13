@@ -1,6 +1,6 @@
 import { Dispatch } from 'react';
 
-export interface UserType {
+export interface User {
   id: number;
   email: string;
   username: string;
@@ -10,5 +10,5 @@ export interface UserType {
 }
 
 export type UserSetterContextType = {
-  setUser: Dispatch<React.SetStateAction<UserType | null>>;
+  setUser: Dispatch<React.SetStateAction<User | null>>;
 };
