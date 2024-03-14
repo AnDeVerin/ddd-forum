@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { Outlet } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import { Header } from '@/components';
-import { User, UserSetterContextType } from '@/utils/types/user';
 import { UserContext } from '@/utils/context/user';
+import { User, UserSetterContextType } from '@/utils/types/user';
 
-import 'react-toastify/dist/ReactToastify.css';
 import styles from './App.module.css';
 
 const queryClient = new QueryClient();

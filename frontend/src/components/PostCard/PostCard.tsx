@@ -1,11 +1,12 @@
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import Link from 'antd/es/typography/Link';
+import Title from 'antd/es/typography/Title';
 import { differenceInCalendarDays } from 'date-fns';
 
-import styles from './PostCard.module.css';
-import { Button } from 'antd';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import Title from 'antd/es/typography/Title';
-import Link from 'antd/es/typography/Link';
 import { Post, Vote, VoteType } from '@/utils/types';
+
+import styles from './PostCard.module.css';
 
 const getPostAge = (postDate: Date) => {
   const diffInDays = differenceInCalendarDays(new Date(), postDate);

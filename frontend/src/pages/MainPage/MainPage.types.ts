@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
 import { TabPaneProps } from 'antd';
+import { ReactNode } from 'react';
 
 export type ActiveTabKeys = 'popular' | 'recent';
 

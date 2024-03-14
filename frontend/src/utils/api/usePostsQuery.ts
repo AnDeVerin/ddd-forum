@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { Post } from '@/utils/types';
 
 interface usePostsQueryParams {

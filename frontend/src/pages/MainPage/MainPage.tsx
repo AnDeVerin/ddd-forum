@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
 import { Spin, Tabs } from 'antd';
+import { useMemo, useState } from 'react';
 
-import { usePostsQuery } from '@/utils/api';
 import { PostCard } from '@/components';
-import type { ActiveTabKeys, PostsTab } from './MainPage.types';
+import { usePostsQuery } from '@/utils/api';
+
 import styles from './MainPage.module.css';
+import type { ActiveTabKeys, PostsTab } from './MainPage.types';
 
 export const MainPage = () => {
   const [activeTabKey, setActiveTabKey] = useState<ActiveTabKeys>('popular');

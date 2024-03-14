@@ -1,17 +1,17 @@
+import { Button, Form, Input } from 'antd';
+import Title from 'antd/es/typography/Title';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Form, Input } from 'antd';
-import Title from 'antd/es/typography/Title';
 
-import { useUserSetter } from '@/utils/hooks/useUserSetter';
 import { ErrorTexts } from '@/utils/constants/errors';
+import { useUserSetter } from '@/utils/hooks/useUserSetter';
+
+import styles from './RegistrationPage.module.css';
 import {
   UserRegistrationData,
   UserRegistrationResponse,
 } from './RegistrationPage.types';
-
-import styles from './RegistrationPage.module.css';
 
 const HOST = import.meta.env.VITE_SERVER_URL;
 
