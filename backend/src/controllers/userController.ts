@@ -5,6 +5,7 @@ import {
   editUser as edit,
   getByEmail,
 } from '../models/userModel';
+import { ResponseDTO } from '../utils/ResponseDTO';
 
 export const createUser: RequestHandler = async (req, res, next) => {
   const { email, username, firstName, lastName } = req.body;
@@ -12,11 +13,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
   try {
     const user = await create({ email, username, firstName, lastName });
 
-    res.status(201).send({
-      error: undefined,
-      data: user,
-      success: true,
-    });
+    res.status(201).send(new ResponseDTO(user, undefined));
   } catch (error) {
     next(error);
   }
@@ -29,11 +26,7 @@ export const editUser: RequestHandler = async (req, res, next) => {
   try {
     const user = await edit({ userId, email, username, firstName, lastName });
 
-    res.status(200).send({
-      error: undefined,
-      data: user,
-      success: true,
-    });
+    res.status(200).send(new ResponseDTO(user, undefined));
   } catch (error) {
     next(error);
   }
@@ -45,11 +38,7 @@ export const getUserByEmail: RequestHandler = async (req, res, next) => {
   try {
     const user = await getByEmail(email as string);
 
-    res.status(200).send({
-      error: undefined,
-      data: user,
-      success: true,
-    });
+    res.status(200).send(new ResponseDTO(user, undefined));
   } catch (error) {
     next(error);
   }

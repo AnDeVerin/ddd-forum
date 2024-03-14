@@ -57,7 +57,7 @@ async function main() {
     },
   });
 
-  const aliceMember = await prisma.member.upsert({
+  const _aliceMember = await prisma.member.upsert({
     where: { userId: alice.id },
     update: {},
     create: {

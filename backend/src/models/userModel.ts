@@ -47,7 +47,7 @@ export const createUser = async ({
     });
 
     return newUser;
-  } catch (error) {
+  } catch {
     throw new Error();
   }
 };
@@ -102,7 +102,7 @@ export const editUser = async ({
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
     };
-  } catch (error) {
+  } catch {
     throw new Error();
   }
 };

@@ -1,17 +1,16 @@
 import { ErrorRequestHandler } from 'express';
 
-import { ClientError } from '../utils/errors';
+import { ClientError, ErrorCodes, ErrorMessages } from '../utils/errors';
+import { ResponseDTO } from '../utils/ResponseDTO';
 
 export const handleError: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ClientError) {
-    return res.status(err.statusCode).send({
-      error: err.message,
-      success: false,
-    });
+    return res
+      .status(err.statusCode)
+      .send(new ResponseDTO(undefined, err.message));
   }
 
-  res.status(500).send({
-    error: 'ServerError',
-    success: false,
-  });
+  res
+    .status(ErrorCodes.SERVER_ERROR)
+    .send(new ResponseDTO(undefined, ErrorMessages.SERVER_ERROR));
 };
