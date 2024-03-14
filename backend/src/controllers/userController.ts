@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+
 import {
   createUser as create,
   editUser as edit,

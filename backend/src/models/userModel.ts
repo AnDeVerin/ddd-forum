@@ -1,11 +1,11 @@
-import { ClientError, ErrorCodes, ErrorMessages } from '../utils/errors';
 import {
-  getUserByEmail,
-  getUserByUsername,
   createUser as create,
+  getUserByEmail,
   getUserById,
+  getUserByUsername,
   updateUserById,
 } from '../utils/db';
+import { ClientError, ErrorCodes, ErrorMessages } from '../utils/errors';
 import { generateRandomPassword } from '../utils/password';
 
 export interface UserProps {

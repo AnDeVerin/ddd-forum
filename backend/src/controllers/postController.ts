@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+
 import { getRecentPosts } from '../models/postModel';
 
 export const getPosts: RequestHandler = async (req, res, next) => {

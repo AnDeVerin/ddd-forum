@@ -1,8 +1,9 @@
-import express from 'express';
 import cors from 'cors';
-import { userRoutes } from './routes/userRoutes';
-import { postRoutes } from './routes/postRoutes';
+import express from 'express';
+
 import { handleError } from './middlewares/errorMiddleware';
+import { postRoutes } from './routes/postRoutes';
+import { userRoutes } from './routes/userRoutes';
 
 const PORT = process.env.PORT || 3000;
 const app = express();

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+
 import { UserProps } from '../../models/userModel';
 
 const prisma = new PrismaClient();
