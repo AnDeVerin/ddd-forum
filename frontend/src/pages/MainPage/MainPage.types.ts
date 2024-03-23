@@ -1,9 +1,9 @@
 import { TabPaneProps } from 'antd';
 import { ReactNode } from 'react';
 
-export type ActiveTabKeys = 'popular' | 'recent';
+import { TabKeys } from './MainPage.constants';
 
 export interface PostsTab extends Omit<TabPaneProps, 'tab'> {
-  key: ActiveTabKeys;
+  key: TabKeys;
   label: ReactNode;
 }

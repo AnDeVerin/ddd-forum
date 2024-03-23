@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { TabKeys } from '@/pages/MainPage/MainPage.constants';
 import { Post } from '@/utils/types';
 
 interface usePostsQueryParams {
-  sort: 'popular' | 'recent';
+  sort: TabKeys;
   limit?: number;
 }
 

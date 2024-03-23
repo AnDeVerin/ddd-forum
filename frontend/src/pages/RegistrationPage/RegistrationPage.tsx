@@ -39,16 +39,16 @@ const tailFormItemLayout = {
   },
 };
 
-const onFinish = async (
+const createUser = async (
   values: UserRegistrationData
 ): Promise<UserRegistrationResponse> => {
-  const responce = await fetch(`${HOST}/users/new`, {
+  const response = await fetch(`${HOST}/users/new`, {
     method: 'POST',
     headers: [['Content-Type', 'application/json; charset=utf-8']],
     body: JSON.stringify(values),
   });
 
-  return responce.json();
+  return response.json();
 };
 
 export const RegistrationPage = () => {
@@ -59,7 +59,7 @@ export const RegistrationPage = () => {
   const handleSubmit = useCallback(
     async (values: UserRegistrationData) => {
       setIsLoading(true);
-      const { success, data, error } = await onFinish(values);
+      const { success, data, error } = await createUser(values);
 
       if (success && data) {
         toast('Success! Redirecting home.', {
